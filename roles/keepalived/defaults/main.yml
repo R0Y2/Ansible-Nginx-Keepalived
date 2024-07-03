@@ -1,0 +1,7 @@
+---
+router_id: nginx
+script_user: rz
+script: "/bin/chk_ngx.sh"
+interface: eth0
+auth_pass: 4224
+float_ip: 10.42.0.24/24

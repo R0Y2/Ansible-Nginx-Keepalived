@@ -1,0 +1,10 @@
+---
+- hosts: "{{ host_type | default('master') }}"
+  become: "{{ is_become | default('yes') }}"
+  gather_facts: "{{ gather_facts | default('no') }}"
+  tasks:
+    - name: check/install/configure
+      include_tasks: tasks/main.yml
+      with_items:
+        - keepalived
+        - nginx

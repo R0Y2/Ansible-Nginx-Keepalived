@@ -1,0 +1,20 @@
+---
+# Configure Keepalived
+- name: Copy chk_ngx.sh
+  copy:
+    src: files/chk_ngx.sh
+    dest: /bin/chk_ngx.sh
+    mode: u+x
+  diff: true
+  register: copy_chk_ngx
+
+- name: Generate keepalived configuration file
+  template: 
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+    validate: keepalived -t -f %s
+  register: kad_cfg_rendered
+
+- name: Reload keepalived service
+  service: name=keepalived state=restarted
+  when: (kad_cfg_rendered.changed == true) or (copy_chk_ngx.changed == true)

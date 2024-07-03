@@ -1,0 +1,14 @@
+---
+- name: Check if {{ item }} is installed
+  stat: path=/usr/sbin/{{ item }}
+  register: service_installed
+
+- name: Install {{ item }}
+  import_tasks: install.yml
+  when: not service_installed.stat.exists
+  vars: 
+    service: "{{ item }}"
+
+- name: Configure {{ item }}
+  include_role:
+    name: "{{ item }}"

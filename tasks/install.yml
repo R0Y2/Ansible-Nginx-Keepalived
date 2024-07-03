@@ -1,0 +1,7 @@
+---
+# Install and enable the service
+- name: Install {{ service }}
+  apt: name={{ service }} state=present
+
+- name: Enable {{ service }}
+  service: name={{ service }} enabled=yes
