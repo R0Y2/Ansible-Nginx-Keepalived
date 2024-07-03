@@ -1,3 +1,4 @@
 .vars
 .outs
+.lint.yml
 Makefile
