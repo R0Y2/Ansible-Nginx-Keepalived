@@ -9,12 +9,14 @@
   register: copy_chk_ngx
 
 - name: Generate keepalived configuration file
-  template: 
+  template:
     src: keepalived.conf.j2
     dest: /etc/keepalived/keepalived.conf
+    mode: '0644'
     validate: keepalived -t -f %s
   register: kad_cfg_rendered
 
-- name: Reload keepalived service
-  service: name=keepalived state=restarted
-  when: (kad_cfg_rendered.changed == true) or (copy_chk_ngx.changed == true)
+- name: Notify keepalived restart handler
+  command: echo "Restart keepalived if config changed"
+  notify: "restart keepalived"
+  changed_when: kad_cfg_rendered.changed or copy_chk_ngx.changed

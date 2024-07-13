@@ -1,0 +1,31 @@
+name: CI.Ansibel-Nginx-Keealived
+
+on:
+  push:
+    branches: [ "devops" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ansible-lint 
+
+    - name: Lint with ansible-lint
+      run: |
+        ansible-lint . --exclude .github -x var-naming,name[prefix],fqcn[action-core]
